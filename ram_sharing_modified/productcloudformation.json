@@ -1,0 +1,44 @@
+{
+"AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Aws Connect Claim Phone number",
+  "Parameters": {
+    "AllowExternalPrincipal":{
+      "Description": "Boolean value(True or False)",
+      "Type": "String"
+    },
+	"RamName":{
+      "Description": "Name of the Ram",
+      "Type": "String"
+    },
+	"SubnetArns":{
+      "Description": "Arns of subnets",
+      "Type": "String"
+    },
+	"sourcetfpath": {
+      "Description": "Terrafrom Module path in Source Repo",
+      "Type": "String",
+      "Default": "Serviccecatalogproducts/ram"
+    },
+	"AssumeRole": {
+      "Description": "Crossaccount Role To Deploy for Deplyment",
+      "Type": "String",
+      "Default": "CourseAndLabs_Role"
+    }
+  },
+    "Resources": {
+        "MyTerraformStack": {
+            "Type": "Custom::TerraformStack",
+            "Properties": {
+                "ServiceToken":"arn:aws:lambda:eu-central-1:314179750241:function:Terraform-Codebuild-Start-005",
+				"region":{"Ref": "AWS::Region"},
+				"TargetAccount":{"Ref": "AWS::AccountId"},
+				"AppName":{"Ref": "AWS::StackName"},
+				"AssumeRole":{"Ref": "AssumeRole"},
+				"sourcetfpath":{"Ref": "sourcetfpath"},
+				"phone_number_description":{"Ref": "PhoneNoDescription"},
+				"phone_number":{"Ref": "PhoneNumber"},
+				"instance_Arn":{"Ref": "InstanceArn"}
+            }
+        }
+    }
+}
